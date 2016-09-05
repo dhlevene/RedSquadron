@@ -1,4 +1,4 @@
 # RedSquadron
 
-Static in the sheets
+Static in the streets
 Dymanic in the sheets
