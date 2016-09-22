@@ -79,7 +79,7 @@ int main(){
     while(halt != 1)
     {
         ir = fetch(instructions, pc);
-
+        pc = pc+1;
         if(ir.op == 1){
             sp++;
             stack[sp] = ir.m;
@@ -151,8 +151,10 @@ int main(){
         }
 
         else if(ir.op == 4){
+            printf("one");
             stack[base(ir.l, bp) + ir.m] = stack[sp];
             sp = sp--;
+            printf("two");
         }
 
         else if(ir.op == 5){
@@ -194,7 +196,7 @@ int main(){
         }
 
         printf("%d\t %d\t %d\n", pc, bp, sp);
-        pc = pc+1;
+
         counterB++;
     }
 
