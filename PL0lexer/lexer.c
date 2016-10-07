@@ -22,6 +22,9 @@ void printTokens(FILE *source);
 Symbol *nextSymbol(FILE *source);
 token_type identifyType(char identifier[100]);
 
+int inComment=0;
+char previousC=' ';
+
 int main(int argc, char *argv[]){
 
     FILE *source = NULL;
@@ -72,23 +75,28 @@ void printTokens(FILE *source){
 Symbol *nextSymbol(FILE *source){
     char *identifier = calloc(100, sizeof(char));
     int i = 0;
-    int inComment=0;
-    char previousC=' ';
     char c;
-    Symbol *symbol = NULL;
+    Symbol *symbol = calloc(1,sizeof(Symbol));
 
+    //Loop for reading through a symbol
     while((c = fgetc(source))!=EOF){
-        /*if((c = fgetc(source))==EOF){
-            Symbol *symbol = malloc(sizeof(Symbol));
-            symbol->identifier = identifier;
-            symbol->type = nulsym;
-            return symbol;
-        }*/
+
+        if(inComment){
+            if(c=='/'&&previousC=='*'){
+                inComment = 0;
+                previousC=' ';
+                i=0;
+                continue;
+            }
+            else{
+                previousC=c;
+                continue;
+            }
+        }
 
         if(isalnum(c)&&!inComment){
-            if(!isalnum(previousC)){
+            if(!isalnum(previousC)&&previousC!=' '&&previousC!='\t'&&previousC!='\n'){
                 ungetc(c,source);
-                Symbol *symbol = malloc(sizeof(Symbol));
                 symbol->identifier = identifier;
                 symbol->type = identifyType(identifier);
                 previousC = c;
@@ -96,7 +104,6 @@ Symbol *nextSymbol(FILE *source){
             }
 
             else{
-                printf("hey");
                 identifier[i] = c;
             }
         }
@@ -106,7 +113,6 @@ Symbol *nextSymbol(FILE *source){
                 previousC = c;
                 continue;
                 }
-            Symbol *symbol = malloc(sizeof(Symbol));
             symbol->identifier = identifier;
             symbol->type = identifyType(identifier);
             previousC = c;
@@ -117,17 +123,14 @@ Symbol *nextSymbol(FILE *source){
             if(!inComment){
                 if(c=='*'&&previousC=='/'){
                     inComment = 1;
-                }
-            }
-
-            else{
-                if(c=='/'&&previousC=='*'){
-                    inComment = 0;
+                    free(identifier);
+                    identifier = calloc(100,sizeof(char));
+                    i=0;
+                    c=' ';
                 }
                 else{
                     if(isalnum(previousC)){
                         ungetc(c,source);
-                        Symbol *symbol = malloc(sizeof(Symbol));
                         symbol->identifier = identifier;
                         symbol->type = identifyType(identifier);
                         previousC = c;
@@ -144,9 +147,11 @@ Symbol *nextSymbol(FILE *source){
         if(i>=100){
             printf("Error: Token too long");
         }
-        //printf("%c", c);
+
         previousC = c;
     }// End while
+    symbol->identifier="NULL";
+    symbol->type=nulsym;
     return symbol;
 }
 
@@ -203,8 +208,7 @@ void printSource(FILE *source, int mirror, int cleanMirror){
             previousC = c;
         }//End while
 
-        //Print last character
-        printf("%c\n\n",previousC);
+        printf("%c\n\n",previousC);//Print last character
     }//End clean mirror
 
     rewind(source);

@@ -1,6 +1,7 @@
 # depslib dependency file v1.0
-1475794260 source:c:\users\immortan\documents\redsquadron\pl0lexer\lexer.c
+1475872787 source:c:\users\immortan\documents\redsquadron\pl0lexer\lexer.c
 	<stdio.h>
 	<string.h>
 	<stdlib.h>
+	<ctype.h>
 
