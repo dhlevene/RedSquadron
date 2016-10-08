@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
 
     //No file
     if(argc < 2){
-        printf("No file specified");
+        printf("Error: No file specified");
         return 1;
     }
 
@@ -149,8 +149,8 @@ Symbol *nextSymbol(FILE *source){
         }
 
         i++;
-        if(i>=100){
-            printf("identifier is too long");
+        if(i>=12){
+            printf("Error: Identifier is too long");
             exit(0);
         }
 
