@@ -20,10 +20,10 @@ Symbol* testFunc();
 int main(int argc, char* argv[]){
 
     char* simples = "3hell3o";
-    char* newString = simples + 1;
+    if(isalpha(simples[5]))
+        printf("yey");
 
-    printf("%s", newString);
-
+    printf("\n\n\n");
 
     Symbol *symbol = malloc(sizeof(Symbol));
     symbol->identifier = "tuna";

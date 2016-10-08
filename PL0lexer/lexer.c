@@ -235,28 +235,21 @@ token_type identifyType(char identifier[100]){
 
    //if we get here then the identifier is either a number/identifier/bad token
 
-   strncpy(tmp, identifier, 1);
-   tmp[1] = '\0';
-   if(atoi(tmp) == 0)
+   if(isalpha(identifier[0]))
         return identsym;
-    else{
-        if(strlen(identifier) > 1){
-            char* tmp2 = identifier + 1;
-            if(atoi(tmp2) == 0){
-                printf("illegal token");
+   else{
+        if(isalpha(identifier[1])){
+           printf("illegal token");
+           exit(0);
+        }
+        else{
+            if(atoi(identifier) >= 65536){
+                printf("number too large");
                 exit(0);
             }
-            else{
-                if(atoi(identifier) >= 65536){
-                    printf("number too large");
-                    exit(0);
-                }
-                else
-                    return numbersym;
-            }
+            else
+                return numbersym;
         }
-        else
-           return numbersym;
     }
 
     printf("illegal token");
