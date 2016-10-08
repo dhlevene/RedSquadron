@@ -14,7 +14,7 @@ typedef enum token {
 
 typedef struct Symbol {
     char *identifier;
-    token_type type;
+    int type;
 } Symbol;
 
 void printSource(FILE *source, int mirror, int cleanMirror);
@@ -66,6 +66,11 @@ void printTokens(FILE *source){
 
     while(symbol==NULL||symbol->type!=nulsym){
         symbol = nextSymbol(source);
+        if(symbol->type == nulsym){
+            free(symbol->identifier);
+            free(symbol);
+            continue;
+        }
         printf("%s\t\t%d\n",symbol->identifier,symbol->type);
         free(symbol->identifier);
         free(symbol);
@@ -145,18 +150,117 @@ Symbol *nextSymbol(FILE *source){
 
         i++;
         if(i>=100){
-            printf("Error: Token too long");
+            printf("identifier is too long");
+            exit(0);
         }
 
         previousC = c;
     }// End while
-    symbol->identifier="NULL";
-    symbol->type=nulsym;
-    return symbol;
+    if(i > 0){
+        symbol ->identifier = identifier;
+        symbol->type = identifyType(identifier);
+        return symbol;
+    }
+    else{
+        symbol->identifier="NULL";
+        symbol->type=nulsym;
+        return symbol;
+    }
 }
 
 token_type identifyType(char identifier[100]){
-    return 1;
+    token_type type;
+    char tmp[1];
+
+    if(strcmp(identifier, "+") == 0)
+        return plussym;
+    else if(strcmp(identifier, "-") == 0)
+        return minussym;
+    else if(strcmp(identifier, "*") == 0)
+        return multsym;
+    else if(strcmp(identifier, "/") == 0)
+        return slashsym;
+    else if(strcmp(identifier, "=") == 0)
+        return eqsym;
+    else if(strcmp(identifier, "<>") == 0)
+        return neqsym;
+    else if(strcmp(identifier, "<=") == 0)
+        return leqsym;
+    else if(strcmp(identifier, ">=") == 0)
+        return geqsym;
+    else if(strcmp(identifier, ">") == 0)
+        return lessym;
+    else if(strcmp(identifier, "<") == 0)
+        return gtrsym;
+    else if(strcmp(identifier, "(") == 0)
+        return lparentsym;
+    else if(strcmp(identifier, ")") == 0)
+        return rparentsym;
+    else if(strcmp(identifier, ",") == 0)
+        return commasym;
+    else if(strcmp(identifier, ";") == 0)
+        return semicolonsym;
+    else if(strcmp(identifier, ".") == 0)
+        return periodsym;
+    else if(strcmp(identifier, ":=") == 0)
+        return becomessym;
+    else if(strcmp(identifier, "const") == 0)
+        return constsym;
+    else if(strcmp(identifier, "var") == 0)
+        return varsym;
+    else if(strcmp(identifier, "procedure") == 0)
+        return procsym;
+    else if(strcmp(identifier, "call") == 0)
+        return callsym;
+    else if(strcmp(identifier, "begin") == 0)
+        return beginsym;
+    else if(strcmp(identifier, "end") == 0)
+        return endsym;
+    else if(strcmp(identifier, "if") == 0)
+        return ifsym;
+    else if(strcmp(identifier, "then") == 0)
+        return thensym;
+    else if(strcmp(identifier, "else") == 0)
+        return elsesym;
+    else if(strcmp(identifier, "while") == 0)
+        return whilesym;
+    else if(strcmp(identifier, "do") == 0)
+        return dosym;
+    else if(strcmp(identifier, "read") == 0)
+        return readsym;
+    else if(strcmp(identifier, "write") == 0)
+        return writesym;
+    else if(strcmp(identifier, "odd") == 0)
+        return oddsym;
+
+   //if we get here then the identifier is either a number/identifier/bad token
+
+   strncpy(tmp, identifier, 1);
+   tmp[1] = '\0';
+   if(atoi(tmp) == 0)
+        return identsym;
+    else{
+        if(strlen(identifier) > 1){
+            char* tmp2 = identifier + 1;
+            if(atoi(tmp2) == 0){
+                printf("illegal token");
+                exit(0);
+            }
+            else{
+                if(atoi(identifier) >= 65536){
+                    printf("number too large");
+                    exit(0);
+                }
+                else
+                    return numbersym;
+            }
+        }
+        else
+           return numbersym;
+    }
+
+    printf("illegal token");
+    exit(0);
 }
 
 void printSource(FILE *source, int mirror, int cleanMirror){
