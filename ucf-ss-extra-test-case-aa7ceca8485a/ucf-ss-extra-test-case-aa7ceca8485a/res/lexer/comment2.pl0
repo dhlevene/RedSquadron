@@ -1,0 +1,10 @@
+var a , b , c ; /* this is single-line comment */
+begin
+  a := /* can you make
+  this? */ 1 ;
+  b := 2 ;
+  c := a / b ;
+  // this is not a comment
+  identifier1/* this break the identifier! */identifier2
+end.
+/* can you handle this invalid case? EOF is not a valid token for now

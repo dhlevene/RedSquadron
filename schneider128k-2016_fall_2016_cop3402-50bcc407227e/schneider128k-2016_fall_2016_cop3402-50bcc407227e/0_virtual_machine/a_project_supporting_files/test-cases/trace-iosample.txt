@@ -1,0 +1,17 @@
+iosample.pl0
+PL/0 code:
+
+  0  IN            
+  1  ODD            
+  2  OUT             
+  3  HLT            
+
+Execution:
+                      pc   bp   sp   stack
+                       0    1    0   
+  0  IN            read 2 from input
+   1    1    1   2 
+  1  ODD               2    1    1   0 
+  2  OUT             0
+   3    1    0   
+  3  HLT               4    1    0   

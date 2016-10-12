@@ -1,0 +1,6 @@
+var a1 , b2 , 3c ;
+begin
+  a1 := 1 ;
+  b2 := 2 ;
+  3c := a + b ;
+end.

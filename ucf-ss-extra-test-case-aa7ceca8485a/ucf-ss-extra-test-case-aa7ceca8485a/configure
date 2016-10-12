@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [ ! -f "bin/init.sh" ]; then
+  echo "Unexpected working directory! Please cd to the root of the submodule extra-test-case.";
+  exit 1;
+fi
+
+## default path
+bin_lexer='../../bin/lexer'
+
+if [ ! -f "$bin_lexer" ]; then
+  bin_lexer='../../a.out'
+fi
+
+if [ ! -f "$bin_lexer" ]; then
+  read -p "The path of the executable for the lexer: " bin_lexer
+  if [ ! -f "$bin_lexer" ]; then
+    echo "$bin_lexer" not found!
+    exit 1;
+  fi
+fi
+
+echo "bin_lexer=$bin_lexer" > path.ini
+
+bash bin/init.sh

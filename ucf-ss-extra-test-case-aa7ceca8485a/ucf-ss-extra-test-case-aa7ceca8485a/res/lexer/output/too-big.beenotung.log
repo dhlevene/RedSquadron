@@ -1,0 +1,46 @@
+
+source code:
+------------
+var a , b , c , d ;
+begin
+  a := 65535 - ( - 1 ) ;
+  b := 65536 ;
+  c := 1048576 ;
+  d := 1073741824 ;
+end.
+
+source code without comments:
+-----------------------------
+var a , b , c , d ;
+begin
+  a := 65535 - ( - 1 ) ;
+  b := 65536 ;
+  c := 1048576 ;
+  d := 1073741824 ;
+end.
+
+tokens:
+-------
+var          29
+a            2
+,            17
+b            2
+,            17
+c            2
+,            17
+d            2
+;            18
+begin        21
+a            2
+:=           20
+65535        3
+-            5
+(            15
+-            5
+1            3
+)            16
+;            18
+b            2
+:=           20
+
+Error : invalid token, number(65536) MAX_NUMBER_VALUE(65535)

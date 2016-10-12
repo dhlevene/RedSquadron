@@ -12,8 +12,6 @@
 #define MAX_STACK_HEIGHT 2000
 #define MAX_CODE_LENGTH 500
 #define MAX_LEXI_LEVELS 3
-#define INPUT_FILE "mcode.pl0"
-#define OUTPUT_FILE "trace.txt"
 
 //Instruction struct
 typedef struct{
@@ -67,10 +65,10 @@ int main(int argc, char *argv[]){
         printf("%3d  %s", counter, name);
         if(name == "STO" || name == "CAL" || name == "LOD")
             printf("    %d", instructions[counter][1]);
-        if(name != "RET" && name != "HLT")
+        if(name != "RET" && name != "HLT" && instructions[counter][0] != 2)
             printf("\t %2d", instructions[counter][2]);
         printf("\n");
-        counter++;
+        counter = counter+1;
     }
 
     fclose(fr);
@@ -144,7 +142,7 @@ void execute(int instructions[][4], int stack[MAX_STACK_HEIGHT], int pc, int bp,
 
         if(name == "STO" || name == "CAL" || name == "LOD")
             printf("    %d", instructions[pc][1]);
-        if(name != "RET" && name != "HLT")
+        if(name != "RET" && name != "HLT" && instructions[pc][0] != 2)
             printf("\t%3d", instructions[pc][2]);
         else
             printf("\t");
@@ -184,6 +182,7 @@ void execute(int instructions[][4], int stack[MAX_STACK_HEIGHT], int pc, int bp,
                 stack[sp] = stack[sp]/stack[sp+1];
             }
             if(ir.m == 6){
+                sp = sp-1;
                 stack[sp] = stack[sp]%2;
             }
             if(ir.m == 7){
@@ -192,27 +191,27 @@ void execute(int instructions[][4], int stack[MAX_STACK_HEIGHT], int pc, int bp,
             }
             if(ir.m == 8){
                 sp = sp-1;
-                stack[sp] = (stack[sp] == stack[sp+1]);
+                stack[sp] = stack[sp] == stack[sp+1];
             }
             if(ir.m == 9){
                 sp = sp-1;
-                stack[sp] = (stack[sp] != stack[sp+1]);
+                stack[sp] = stack[sp] != stack[sp+1];
             }
             if(ir.m == 10){
                 sp = sp-1;
-                stack[sp] = (stack[sp] < stack[sp+1]);
+                stack[sp] = stack[sp] < stack[sp+1];
             }
             if(ir.m == 11){
                 sp = sp-1;
-                stack[sp] = (stack[sp] <= stack[sp+1]);
+                stack[sp] = stack[sp] <= stack[sp+1];
             }
             if(ir.m == 12){
                 sp = sp-1;
-                stack[sp] = (stack[sp] > stack[sp+1]);
+                stack[sp] = stack[sp] > stack[sp+1];
             }
             if(ir.m == 13){
                 sp = sp-1;
-                stack[sp] = (stack[sp] >= stack[sp+1]);
+                stack[sp] = stack[sp] >= stack[sp+1];
             }
 
         }
@@ -238,7 +237,7 @@ void execute(int instructions[][4], int stack[MAX_STACK_HEIGHT], int pc, int bp,
         }
 
         else if(ir.op == 6){
-            sp = sp+ir.m;
+            sp = sp + ir.m;
         }
 
         else if(ir.op == 7){
@@ -278,11 +277,10 @@ void execute(int instructions[][4], int stack[MAX_STACK_HEIGHT], int pc, int bp,
 
 void printStack(int stack[], int sp, int cal){
     int i;
-    for(i=0; i<sp; i++){
+    for(i=1; i<=sp; i++){
         printf("%d ", stack[i]);
         if(cal != -1)
-            if(i==cal)
-            printf("| ");
+            if(i==cal && i!=sp)
+                printf("| ");
     }
-    //printf("\n");
 }

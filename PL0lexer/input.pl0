@@ -1,5 +1,1 @@
-var x, y;
-begin
-  x := 3;       /* This is := a % comment. */ x := 4;
-  x := y + 56;
-end.
+1x := 9 /*dfgnasdng*/

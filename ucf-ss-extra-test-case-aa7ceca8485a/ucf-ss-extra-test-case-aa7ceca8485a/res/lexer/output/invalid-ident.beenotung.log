@@ -1,0 +1,28 @@
+
+source code:
+------------
+var a1 , b2 , 3c ;
+begin
+  a1 := 1 ;
+  b2 := 2 ;
+  3c := a + b ;
+end.
+
+source code without comments:
+-----------------------------
+var a1 , b2 , 3c ;
+begin
+  a1 := 1 ;
+  b2 := 2 ;
+  3c := a + b ;
+end.
+
+tokens:
+-------
+var          29
+a1           2
+,            17
+b2           2
+,            17
+
+Error : Invalid Identifier '3c', identifier cannot start with number
