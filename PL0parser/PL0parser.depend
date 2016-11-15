@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1479230199 source:c:\users\damian\documents\redsquadron\pl0parser\compile.c
+	"lexer.h"
+
+1479232292 c:\users\damian\documents\redsquadron\pl0parser\lexer.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+
+1479229592 source:c:\users\damian\documents\redsquadron\pl0parser\lexer.c
+	"lexer.h"
+
