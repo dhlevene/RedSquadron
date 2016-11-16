@@ -11,6 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="input.pl0 test.pm0" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -31,6 +32,14 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="compile.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lexer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lexer.h" />
+		<Unit filename="vm.o" />
 		<Extensions>
 			<code_completion />
 			<envvars />
