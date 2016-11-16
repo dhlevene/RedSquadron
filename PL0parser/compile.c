@@ -1,8 +1,9 @@
 #include "lexer.h"
 
-variableSymbol symbol_table[MAX_SYMBOL_TABLE_SIZE];
+variableSymbol* symbol_table[MAX_SYMBOL_TABLE_SIZE];
 FILE *sourceFile;
 Symbol* currentToken;
+int numSymbols;
 
 const char *errorMessages[] = {"Use = instead of :=",
 "= must be followed by a number",
@@ -39,6 +40,28 @@ int isRelation(int token){
     return 0;
 }
 
+variableSymbol* addVariableSymbol(){
+    int i;
+
+    while(i<numSymbols){
+        if(strcmp(symbol_table[i]->name,currentToken->identifier)==0){
+            printError(0);//Wrong error
+            exit(1);
+            return NULL;
+        }
+    }
+
+    if(i==numSymbols&&numSymbols!=MAX_SYMBOL_TABLE_SIZE){
+        variableSymbol* newSymbol = calloc(1,sizeof(variableSymbol));
+        strcpy(newSymbol->name,currentToken->identifier);
+        symbol_table[i]=newSymbol;
+        numSymbols++;
+        return newSymbol;
+    }
+
+    return NULL;
+}
+
 void cycleNextToken(){
     currentToken = nextSymbol(sourceFile);
 }
@@ -62,12 +85,15 @@ void block(){
             cycleNextToken();
             if(currentToken!=identsym)
                 printError(0);//Not correct error
+            variableSymbol* tempSymbol = addVariableSymbol();
+            tempSymbol->kind = 1;
             cycleNextToken();
             if(currentToken!=eqsym)
                 printError(0);//Not correct error
             cycleNextToken();
             if(currentToken!=numbersym)
                 printError(0);//Not correct error
+            tempSymbol->val=atoi(currentToken->identifier);
             cycleNextToken();
         }
         if(currentToken!=semicolonsym)
@@ -79,6 +105,8 @@ void block(){
             cycleNextToken();
             if(currentToken!=identsym)
                 printError(0);
+            variableSymbol* tempSymbol = addVariableSymbol();
+            tempSymbol->kind=2;
             cycleNextToken();
         }
         if(currentToken!=semicolonsym)
@@ -89,6 +117,8 @@ void block(){
         cycleNextToken();
         if(currentToken!=identsym)
             printError(0);//Wrong error
+        variableSymbol* tempSymbol = addVariableSymbol();
+        tempSymbol->kind=3;
         cycleNextToken();
         if(currentToken!=semicolonsym)
             printError(0);
