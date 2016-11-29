@@ -134,6 +134,15 @@ Symbol *nextSymbol(FILE *source){
                     c=' ';
                 }
                 else{
+                    if(i != 0){
+                        if(c == '*' || c == '/' || c == '(' || c == ')'){
+                            ungetc(c,source);
+                            symbol->identifier = identifier;
+                            symbol->type = identifyType(identifier);
+                            previousC = c;
+                            return symbol;
+                        }
+                    }
                     if(isalnum(previousC)){
                         ungetc(c,source);
                         symbol->identifier = identifier;
